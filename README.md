@@ -5,10 +5,6 @@ Naml provides, hopefully, an easy way to build XML templates in .NET.
 ## Quick Example
 
 ```
-using System;
-using System.Linq;
-using Naml;
-
 namespace Naml.TestConsole
 {
     class Program
@@ -21,14 +17,15 @@ namespace Naml.TestConsole
 
         static void Main(string[] args)
         {
-            var xt = Naml.Create<TemplateData>(
+            var xt = Naml.Create<TemplateData>(t => 
                 html => html.Set(
                     div => div.Set(
                         new { attribute_name = "value", stuff = "cool", number = 2 },
-                        p => p.Set(t => string.Format("Item 1 = {0}", t.TheString)),
+                        p => p.Set(string.Format("Item 1 = {0}", t.TheString)),
                         p => p.Set(new { data = "some stuff" }, "Item \" 2"),
-                        ul => ul.Set(t => Enumerable.Range(1, t.TheNumber).Select(
-                            i => (Action<Naml<TemplateData>>) (li => li.Set(string.Format("list item {0}", i))))
+                        ul => ul.Set(Enumerable.Range(1, t.TheNumber).Select(
+                            i => (Action<Naml<TemplateData>>) 
+                                (li => li.Set(string.Format("list item {0}", i))))
                         )
                     ),
                     div => div.Set((CData)"this is some cdata"),
@@ -37,7 +34,6 @@ namespace Naml.TestConsole
             );
 
             Console.WriteLine(xt.ToString(new TemplateData { TheNumber = 5, TheString = "Hello" }));
-            Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine(xt.ToString(new TemplateData { TheNumber = 2, TheString = "BLAH BLAH" }));
             Console.ReadLine();
@@ -51,6 +47,10 @@ namespace Naml.TestConsole
 Use `Naml.Create<T>(Action<Naml<T>> node)` to generate a document with a root node.  The action delegate is used 
 to build the contents of the root node.  Using anonymous delegates as node builders, the parameter name of the function is
 is used as a node name.
+
+Use `Naml.Create<T>(Func<T, Action<Naml<T>> node)>` to generate a document with a root node taht is derived from a template 
+data object.  The Func will be called when a `ToString(T source)` is called.  The function will then generate
+an `Action<Naml<T>>` delegate to generate content.
 
 The generic type `T` determines the .Net type that can be used as a template data source.
 
@@ -69,7 +69,8 @@ Used to generate node contents:
    attribute names and associated values.
 * (Optional) One of:
  * One or more `Action<Naml<T>>` node builders representing the child nodes - the parameter name of each node
-   builder delegate drives the child node name.
+   builder delegate drives the child node name.  *NOTE*: This can be a variable number of arguments or a single
+   `IEnumerable<Action<Naml<T>>>`
  * A string representing a text contents of the node.
  * A string casted to type of `Naml.CData` to represent a CData content node.
 
@@ -93,7 +94,7 @@ cases :)]
 Use the `ToString(T source)` method to generate an XML string.  Provide an instance of type `T` as the argument
 to drive delegate-driven content and attribute generation.
 
-[*NOTE*: `Naml<T>.ToString() will throw a NotImplementedException.  You _must_ provide a template data object
+[*NOTE*: `Naml<T>.ToString()` will throw a NotImplementedException.  You _must_ provide a template data object
 parameter.]
 
 ### Using the non-generic Naml class

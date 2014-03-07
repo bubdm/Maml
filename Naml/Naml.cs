@@ -11,12 +11,17 @@ namespace Naml
     /// <typeparam name="T">Type of template Naml instance will use for templated output.</typeparam>
     public class Naml<T>
     {
-        protected string nodeName = null;
+        private Action<Naml<T>> builder = null;
+        private Func<T, Action<Naml<T>>> builderFunc = null;
         private NodeContents<T> contents = new NodeContents<T>();
 
-        protected Naml(string node)
+        protected Naml(Action<Naml<T>> node)
         {
-            nodeName = node;
+            builder = node;
+        }
+        protected Naml(Func<T, Action<Naml<T>>> node)
+        {
+            builderFunc = node;
         }
 
         /// <summary>
@@ -27,10 +32,11 @@ namespace Naml
         /// <returns>Instance of Naml{T} object representing a root node.</returns>
         public static Naml<T> Create(Action<Naml<T>> node)
         {
-            string name = node.Method.GetParameters()[0].Name;
-            Naml<T> newNode = new Naml<T>(name);
-            node(newNode);
-            return newNode;
+            return new Naml<T>(node);
+        }
+        public static Naml<T> Create(Func<T, Action<Naml<T>>> node)
+        {
+            return new Naml<T>(node);
         }
 
         /// <summary>
@@ -45,6 +51,16 @@ namespace Naml
             contents.Children = nodes;
         }
         /// <summary>
+        /// Set attributes and child nodes of current node.
+        /// </summary>
+        /// <param name="attributes">Any object where property names and values are used to determine attribute 
+        /// names and values</param>
+        /// <param name="nodes">One of more node builder functions representing the child nodes.</param>
+        public void Set(object attributes, IEnumerable<Action<Naml<T>>> nodes)
+        {
+            contents.NodeAttributesObject = attributes;
+            contents.Children = nodes;
+        }        /// <summary>
         /// Set attributes and child nodes of current node.
         /// </summary>
         /// <param name="attributes">Any object where the property names and values are used to determine attribute 
@@ -63,6 +79,17 @@ namespace Naml
         /// the property names and values are used to determine attribute names and values</param>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>
         public void Set(Func<T, object> attributes, params Action<Naml<T>>[] nodes)
+        {
+            contents.nodeAttributesObjectFunc = attributes;
+            contents.Children = nodes;
+        }
+        /// <summary>
+        /// Set attributes and child nodes of current node.
+        /// </summary>
+        /// <param name="attributes">A function that takes a parameter of type T and returns any object wherer
+        /// the property names and values are used to determine attribute names and values</param>
+        /// <param name="nodes">One of more node builder functions representing the child nodes.</param>
+        public void Set(Func<T, object> attributes, IEnumerable<Action<Naml<T>>> nodes)
         {
             contents.nodeAttributesObjectFunc = attributes;
             contents.Children = nodes;
@@ -95,6 +122,17 @@ namespace Naml
         /// </summary>
         /// <param name="attributes">A string/string dictionary where keys and values are used to determine 
         /// attribute names and values</param>
+        /// <param name="nodes">One of more node builder functions representing the child nodes.</param>
+        public void Set(IDictionary<string, string> attributes, IEnumerable<Action<Naml<T>>> nodes)
+        {
+            contents.NodeAttributes = attributes;
+            contents.Children = nodes;
+        }
+        /// <summary>
+        /// Set attributes and child nodes of current node.
+        /// </summary>
+        /// <param name="attributes">A string/string dictionary where keys and values are used to determine 
+        /// attribute names and values</param>
         /// <param name="nodes">A function that takes a parameter of type T and returns an enumeration of
         /// node builder functions representing the child nodes.</param>
         public void Set(IDictionary<string, string> attributes, Func<T, IEnumerable<Action<Naml<T>>>> nodes)
@@ -118,6 +156,17 @@ namespace Naml
         /// </summary>
         /// <param name="attributes">A function that takes a parameter of type T and returns a string/string 
         /// dictionary where keys and values are used to determine attribute names and values</param>
+        /// <param name="nodes">One of more node builder functions representing the child nodes.</param>        
+        public void Set(Func<T, IDictionary<string, string>> attributes, IEnumerable<Action<Naml<T>>> nodes)
+        {
+            contents.NodeAttributesFunc = attributes;
+            contents.Children = nodes;
+        }
+        /// <summary>
+        /// Set attributes and child nodes of current node.
+        /// </summary>
+        /// <param name="attributes">A function that takes a parameter of type T and returns a string/string 
+        /// dictionary where keys and values are used to determine attribute names and values</param>
         /// <param name="nodes">A function that takes a parameter of type T and returns an enumeration of
         /// node builder functions representing the child nodes.</param>      
         public void Set(Func<T, IDictionary<string, string>> attributes, Func<T, IEnumerable<Action<Naml<T>>>> nodes)
@@ -130,6 +179,14 @@ namespace Naml
         /// </summary>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>        
         public void Set(params Action<Naml<T>>[] nodes)
+        {
+            contents.NodeAttributesObject = null;
+            contents.Children = nodes;
+        }        /// <summary>
+        /// Set child nodes of current node with no attributes.
+        /// </summary>
+        /// <param name="nodes">One of more node builder functions representing the child nodes.</param>        
+        public void Set(IEnumerable<Action<Naml<T>>> nodes)
         {
             contents.NodeAttributesObject = null;
             contents.Children = nodes;
@@ -418,40 +475,44 @@ namespace Naml
             contents.SelfClose = true;
         }
 
-        protected void RenderNode(StringBuilder builder, T obj)
+        protected void RenderNode(StringBuilder sb, T obj)
         {
-            builder.AppendFormat("<{0}", XmlConvert.EncodeName(nodeName));
+            Action<Naml<T>> actualBuilder = builder ?? builderFunc(obj);
+            string nodeName = actualBuilder.Method.GetParameters()[0].Name;
+            actualBuilder(this);
+
+            sb.AppendFormat("<{0}", XmlConvert.EncodeName(nodeName));
             var atts = contents.GetAttributes(obj);
             if (atts != null)
             {
                 foreach (var att in atts)
                 {
-                    builder.AppendFormat(" {0}=\"{1}\"",
+                    sb.AppendFormat(" {0}=\"{1}\"",
                         XmlConvert.EncodeName(att.Key.Replace('_', '-')), 
                         System.Security.SecurityElement.Escape(att.Value));
                 }
             }
             if (contents.SelfClose)
             {
-                builder.Append("/>");
+                sb.Append("/>");
             }
             else
             {
-                builder.Append(">");
+                sb.Append(">");
                 var text = contents.GetStringValue(obj);
                 var children = contents.GetChildren(obj);
                 if (text != null)
                 {
-                    builder.Append(text);
+                    sb.Append(text);
                 }
                 else
                 {
                     foreach (var expr in children)
                     {
-                        Naml<T>.Create(expr).RenderNode(builder, obj);
+                        Naml<T>.Create(expr).RenderNode(sb, obj);
                     }
                 }
-                builder.AppendFormat("</{0}>", XmlConvert.EncodeName(nodeName));
+                sb.AppendFormat("</{0}>", XmlConvert.EncodeName(nodeName));
             }
         }
         /// <summary>
@@ -487,7 +548,7 @@ namespace Naml
     /// </remarks>
     public class Naml : Naml<object>
     {
-        protected Naml(string node) : base(node)
+        protected Naml(Action<Naml> node) : base((Action<Naml<object>>) node)
         {
         }
         /// <summary>
@@ -501,6 +562,10 @@ namespace Naml
         {
             return Naml<T>.Create(node);
         }
+        public static Naml<T> Create<T>(Func<T, Action<Naml<T>>> node)
+        {
+            return Naml<T>.Create(node);
+        }
         /// <summary>
         /// Create a non-generic instance of Naml.
         /// </summary>
@@ -509,10 +574,7 @@ namespace Naml
         /// <returns>Instance of Naml object representing a root node.</returns>
         public static Naml Create(Action<Naml> node)
         {
-            string name = node.Method.GetParameters()[0].Name;
-            Naml newNode = new Naml(name);
-            node(newNode);
-            return newNode;
+            return new Naml(node);
         }
         /// <summary>
         /// Render Naml template to an XML string.
