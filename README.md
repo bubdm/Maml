@@ -55,7 +55,7 @@ used a node name.
 The generic type `T` determines the .Net type that can be used as a template data source.
 
 ### Generating node contents
-The `Action<Naml<T>>` delegate lets you call methods on a `<Naml<T>>` builder instance:
+The `Action<Naml<T>>` delegate lets you call methods on a `Naml<T>` builder instance:
 
 * The `Set()` method can be used to generate child nodes, text content or a CDATA node with or without attributes.
 * The `Self()` method can be used to generate a self closing node with out without attributes.
@@ -101,4 +101,4 @@ The non-generic `Naml` class is used to generate XML documents without template 
 a sub-class of `Naml<object>`, all of the methods are available.  However, providing delegate-driven content
 and attribute functions will always have a `null` passed into them when XML generation is done.
 
-Use `Naml.ToString()` to generate XML content (yes, this one will _not_ thrown an exception).
+Use `Naml.ToString()` to generate XML content (yes, this one will _not_ throw an exception).
