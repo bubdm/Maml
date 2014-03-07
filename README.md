@@ -4,7 +4,12 @@ Naml provides, hopefully, an easy way to build XML templates in .NET.
 
 ## Quick Example
 
+This console application:
 ```
+using System;
+using System.Linq;
+using Naml;
+
 namespace Naml.TestConsole
 {
     class Program
@@ -17,7 +22,7 @@ namespace Naml.TestConsole
 
         static void Main(string[] args)
         {
-            var xt = Naml.Create<TemplateData>(t => 
+            var xt = new Naml<TemplateData>(t => 
                 html => html.Set(
                     div => div.Set(
                         new { attribute_name = "value", stuff = "cool", number = 2 },
@@ -29,26 +34,44 @@ namespace Naml.TestConsole
                         )
                     ),
                     div => div.Set((CData)"this is some cdata"),
-                    script => script.Set(new { src = "http://www.something.com/test.js", type = "text/javascript" })
+                    script => script.Set(new 
+                    { 
+                        src = "http://www.something.com/test.js", type = "text/javascript" 
+                    })
                 )
             );
 
-            Console.WriteLine(xt.ToString(new TemplateData { TheNumber = 5, TheString = "Hello" }));
+            Console.WriteLine(
+                xt.ToString(
+                    new TemplateData { TheNumber = 5, TheString = "Hello" }
+                )
+            );
             Console.WriteLine();
-            Console.WriteLine(xt.ToString(new TemplateData { TheNumber = 2, TheString = "BLAH BLAH" }));
+            Console.WriteLine(
+                xt.ToString(
+                    new TemplateData { TheNumber = 2, TheString = "BLAH BLAH" }
+                )
+            );
             Console.ReadLine();
         }
     }
 }
 ```
 
+Produces this output:
+```
+<html><div attribute-name="value" stuff="cool" number="2"><p>Item 1 = Hello</p><p data="some stuff">Item &quot; 2</p><ul><li>list item 1</li><li>list item 2</li><li>list item 3</li><li>list item 4</li><li>list item 5</li></ul></div><div><![CDATA[this is some cdata]]></div><script src="http://www.something.com/test.js"type="text/javascript"></script></html>
+
+<html><div attribute-name="value" stuff="cool" number="2"><p>Item 1 = BLAH BLAH</p><p data="some stuff">Item &quot; 2</p><ul><li>list item 1</li><li>list item 2</li></ul></div><div><![CDATA[this is some cdata]]></div><script src="http://www.something.com/test.js" type="text/javascript"></script></html>
+```
+
 ## How it works
 ### Creating the document and root node
-Use `Naml.Create<T>(Action<Naml<T>> node)` to generate a document with a root node.  The action delegate is used 
+Use `new Naml<T>(Action<Naml<T>> node)` to generate a document with a root node.  The action delegate is used 
 to build the contents of the root node.  Using anonymous delegates as node builders, the parameter name of the function is
 is used as a node name.
 
-Use `Naml.Create<T>(Func<T, Action<Naml<T>>> node)>` to generate a document with a root node that is derived from a template 
+Use `new Naml<T>(Func<T, Action<Naml<T>>> node)>` to generate a document with a root node that is derived from a template 
 data object.  The Func will be called when a `ToString(T source)` is called.  The function will then generate
 an `Action<Naml<T>>` delegate to generate content.
 

@@ -14,7 +14,7 @@ namespace Naml.TestConsole
 
         static void Main(string[] args)
         {
-            var xt = Naml.Create<TemplateData>(t => 
+            var xt = new Naml<TemplateData>(t => 
                 html => html.Set(
                     div => div.Set(
                         new { attribute_name = "value", stuff = "cool", number = 2 },
@@ -26,13 +26,24 @@ namespace Naml.TestConsole
                         )
                     ),
                     div => div.Set((CData)"this is some cdata"),
-                    script => script.Set(new { src = "http://www.something.com/test.js", type = "text/javascript" })
+                    script => script.Set(new 
+                    { 
+                        src = "http://www.something.com/test.js", type = "text/javascript" 
+                    })
                 )
             );
 
-            Console.WriteLine(xt.ToString(new TemplateData { TheNumber = 5, TheString = "Hello" }));
+            Console.WriteLine(
+                xt.ToString(
+                    new TemplateData { TheNumber = 5, TheString = "Hello" }
+                )
+            );
             Console.WriteLine();
-            Console.WriteLine(xt.ToString(new TemplateData { TheNumber = 2, TheString = "BLAH BLAH" }));
+            Console.WriteLine(
+                xt.ToString(
+                    new TemplateData { TheNumber = 2, TheString = "BLAH BLAH" }
+                )
+            );
             Console.ReadLine();
         }
     }

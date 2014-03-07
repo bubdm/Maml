@@ -15,11 +15,21 @@ namespace Naml
         private Func<T, Action<Naml<T>>> builderFunc = null;
         private NodeContents<T> contents = new NodeContents<T>();
 
-        protected Naml(Action<Naml<T>> node)
+        /// <summary>
+        /// Create instance of Naml{T} with the root node builder.
+        /// </summary>
+        /// <param name="node">Action{Naml{T}} node builder delegate.  Name of parameter in delegate
+        /// determines the name of the node.</param>
+        public Naml(Action<Naml<T>> node)
         {
             builder = node;
         }
-        protected Naml(Func<T, Action<Naml<T>>> node)
+        /// <summary>
+        /// Create instance of Naml{T} with the root node builder.
+        /// </summary>
+        /// <param name="node">Func{T, Action{Naml{T}}} delegate for generating a node builder from template 
+        /// data of type T.  The parameter for the Action{Naml{T}} delegate determines the node name
+        public Naml(Func<T, Action<Naml<T>>> node)
         {
             builderFunc = node;
         }
@@ -548,24 +558,15 @@ namespace Naml
     /// </remarks>
     public class Naml : Naml<object>
     {
-        protected Naml(Action<Naml> node) : base((Action<Naml<object>>) node)
-        {
-        }
         /// <summary>
-        /// Another way to generate a Naml{T} instance by using a generic method type parameter.
+        /// Create instance of Naml with the root node builder.
         /// </summary>
-        /// <typeparam name="T">Type of template Naml instance will use for templated output.</typeparam>
-        /// <param name="node">Action{Naml{T}} function to product content.  Name of function parameters 
+        /// <param name="node">Action{Naml} node builder delegate.  Name of parameter in delegate
         /// determines the name of the node.</param>
-        /// <returns>Instance of Naml{T} object representing a root node.</returns>
-        public static Naml<T> Create<T>(Action<Naml<T>> node)
+        public Naml(Action<Naml> node) : base((Action<Naml<object>>) node)
         {
-            return Naml<T>.Create(node);
         }
-        public static Naml<T> Create<T>(Func<T, Action<Naml<T>>> node)
-        {
-            return Naml<T>.Create(node);
-        }
+
         /// <summary>
         /// Create a non-generic instance of Naml.
         /// </summary>
