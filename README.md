@@ -49,8 +49,8 @@ namespace Naml.TestConsole
 ## How it works
 ### Creating the document and root node
 Use `Naml.Create<T>(Action<Naml<T>> node)` to generate a document with a root node.  The action delegate is used 
-to build the contents of the root node.  Using lambda functions as node builders, the parameter name of the function is
-used a node name.
+to build the contents of the root node.  Using anonymous delegates as node builders, the parameter name of the function is
+is used as a node name.
 
 The generic type `T` determines the .Net type that can be used as a template data source.
 
