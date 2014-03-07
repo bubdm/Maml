@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Naml
 {
-    public static class Extensions
+    internal static class Extensions
     {
         public static Dictionary<string, object> ToDictionary(this object source, bool emptyDictionaryOnNull = false)
         {

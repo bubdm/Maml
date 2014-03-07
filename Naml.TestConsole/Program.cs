@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Naml;
 
 namespace Naml.TestConsole
@@ -14,6 +11,7 @@ namespace Naml.TestConsole
             public int TheNumber { get; set; }
             public String TheString { get; set; }
         }
+
         static void Main(string[] args)
         {
             var xt = Naml.Create<TemplateData>(
