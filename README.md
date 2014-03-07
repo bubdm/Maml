@@ -48,7 +48,7 @@ Use `Naml.Create<T>(Action<Naml<T>> node)` to generate a document with a root no
 to build the contents of the root node.  Using anonymous delegates as node builders, the parameter name of the function is
 is used as a node name.
 
-Use `Naml.Create<T>(Func<T, Action<Naml<T>> node)>` to generate a document with a root node that is derived from a template 
+Use `Naml.Create<T>(Func<T, Action<Naml<T>>> node)>` to generate a document with a root node that is derived from a template 
 data object.  The Func will be called when a `ToString(T source)` is called.  The function will then generate
 an `Action<Naml<T>>` delegate to generate content.
 
@@ -71,7 +71,7 @@ Used to generate node contents:
  * One or more `Action<Naml<T>>` node builders representing the child nodes - the parameter name of each node
    builder delegate drives the child node name.  *NOTE*: This can be a variable number of arguments or a single
    `IEnumerable<Action<Naml<T>>>`
- * A string representing a text contents of the node.
+ * A string representing the text contents of the node.
  * A string casted to type of `Naml.CData` to represent a CData content node.
 
 In addition, any parameter can be replaced by a `Func<T, TargetType>` delegate to have template data of type `T`
