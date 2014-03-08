@@ -129,7 +129,7 @@ cases :)]
 
 ### Generating XML document string
 Use the `ToString(T source, bool indent = false)` method to generate an XML string.  Provide an instance of type `T` as the argument
-to drive delegate-driven content and attribute generation.  The `indent` argument determines if indentation and line break are added
+to drive delegate-driven content and attribute generation.  The `indent` argument determines if indentation and line breaks are added
 (defaults to no indenting).  Indentation always uses tabs for indentions.
 
 [*NOTE*: `Maml<T>.ToString()` will throw a NotImplementedException.  You _must_ provide a template data object

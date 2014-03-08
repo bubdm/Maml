@@ -554,6 +554,7 @@ namespace Maml
         /// </summary>
         /// <param name="source">Instance of object of type T to drive function-based attributes,
         /// Text, CDATA and child nodes.</param>
+        /// <param name="indent">True for indentation and line breaks.  Defaults to False.</param>
         /// <returns>XML string</returns>
         public string ToString(T source, bool indent = false)
         {
@@ -603,6 +604,15 @@ namespace Maml
         {
             return base.ToString(null);
         }
+        /// <summary>
+        /// Render Maml template to an XML string.
+        /// </summary>
+        /// <remarks>
+        /// No template data object is required, the template data object provided to all function-driven attribute,
+        /// text, CDATA, and node builders will be null.
+        /// </remarks>
+        /// <param name="indent">True for indentation and line breaks.</param>
+        /// <returns>XML string</returns>
         public string ToString(bool indent)
         {
             return base.ToString(null, indent);
