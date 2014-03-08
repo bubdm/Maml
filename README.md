@@ -1,6 +1,6 @@
-# Naml - a .NET XML Templating Engine
-Naml is an easy way to build XML/HTML (xml compliant) documents.  Insipred by Jaml (http://edspencer.github.io/jaml/),
-Naml provides, hopefully, an easy way to build XML templates in .NET.
+# Maml - a Microsoft .Net XML Templating Engine
+Maml is an easy way to build XML/HTML (xml compliant) documents.  Insipred by Jaml (http://edspencer.github.io/jaml/),
+Maml provides, hopefully, an easy way to build XML templates in Microsoft .NET applications.
 
 ## Quick Example
 
@@ -8,9 +8,9 @@ This console application:
 ```
 using System;
 using System.Linq;
-using Naml;
+using Maml;
 
-namespace Naml.TestConsole
+namespace Maml.TestConsole
 {
     class Program
     {
@@ -22,14 +22,14 @@ namespace Naml.TestConsole
 
         static void Main(string[] args)
         {
-            var xt = new Naml<TemplateData>(t => 
+            var xt = new Maml<TemplateData>(t => 
                 html => html.Set(
                     div => div.Set(
                         new { attribute_name = "value", stuff = "cool", number = 2 },
                         p => p.Set(string.Format("Item 1 = {0}", t.TheString)),
                         p => p.Set(new { data = "some stuff" }, "Item \" 2"),
                         ul => ul.Set(Enumerable.Range(1, t.TheNumber).Select(
-                            i => (Action<Naml<TemplateData>>) 
+                            i => (Action<Maml<TemplateData>>) 
                                 (li => li.Set(string.Format("list item {0}", i))))
                         )
                     ),
@@ -67,18 +67,18 @@ Produces this output:
 
 ## How it works
 ### Creating the document and root node
-Use `new Naml<T>(Action<Naml<T>> node)` to generate a document with a root node.  The action delegate is used 
+Use `new Maml<T>(Action<Maml<T>> node)` to generate a document with a root node.  The action delegate is used 
 to build the contents of the root node.  Using anonymous delegates as node builders, the parameter name of the function is
 is used as a node name.
 
-Use `new Naml<T>(Func<T, Action<Naml<T>>> node)>` to generate a document with a root node that is derived from a template 
+Use `new Maml<T>(Func<T, Action<Maml<T>>> node)>` to generate a document with a root node that is derived from a template 
 data object.  The Func will be called when a `ToString(T source)` is called.  The function will then generate
-an `Action<Naml<T>>` delegate to generate content.
+an `Action<Maml<T>>` delegate to generate content.
 
 The generic type `T` determines the .Net type that can be used as a template data source.
 
 ### Generating node contents
-The `Action<Naml<T>>` delegate lets you call methods on a `Naml<T>` builder instance:
+The `Action<Maml<T>>` delegate lets you call methods on a `Maml<T>` builder instance:
 
 * The `Set()` method can be used to generate child nodes, text content or a CDATA node with or without attributes.
 * The `Self()` method can be used to generate a self closing node with out without attributes.
@@ -91,20 +91,20 @@ Used to generate node contents:
  * Any object implementing `IDictionary<string, string>` - key names and values determine the node's 
    attribute names and associated values.
 * (Optional) One of:
- * One or more `Action<Naml<T>>` node builders representing the child nodes - the parameter name of each node
+ * One or more `Action<Maml<T>>` node builders representing the child nodes - the parameter name of each node
    builder delegate drives the child node name.  *NOTE*: This can be a variable number of arguments or a single
-   `IEnumerable<Action<Naml<T>>>`
+   `IEnumerable<Action<Maml<T>>>`
  * A string representing the text contents of the node.
- * A string casted to type of `Naml.CData` to represent a CData content node.
+ * A string casted to type of `Maml.CData` to represent a CData content node.
 
 In addition, any parameter can be replaced by a `Func<T, TargetType>` delegate to have template data of type `T`
 drive the generation of attributes, child nodes, text and CDATA elements.  The different `Func<,>` types are:
 
 * `Func<T, object>` is a template data function to generate attribute object.
 * `Func<T, IDictionary<string, string>>` is a template data function to generate attribute string dictionary.
-* `Func<T, IEnumerable<Action<Naml<T>>>` is a template data function to generate child nodes.
+* `Func<T, IEnumerable<Action<Maml<T>>>` is a template data function to generate child nodes.
 * `Func<T, string>` is a template data function to generate node text.
-* `Func<T, Naml.CData>` is a template data function to generate node CDATA.
+* `Func<T, Maml.CData>` is a template data function to generate node CDATA.
 
 #### The `Self()` method
 Used to generate a self-closing node.  There is one optional parameter to provide attributes to the node, similar
@@ -117,12 +117,12 @@ cases :)]
 Use the `ToString(T source)` method to generate an XML string.  Provide an instance of type `T` as the argument
 to drive delegate-driven content and attribute generation.
 
-[*NOTE*: `Naml<T>.ToString()` will throw a NotImplementedException.  You _must_ provide a template data object
+[*NOTE*: `Maml<T>.ToString()` will throw a NotImplementedException.  You _must_ provide a template data object
 parameter.]
 
-### Using the non-generic Naml class
-The non-generic `Naml` class is used to generate XML documents without template data.  Internally, `Naml` is
-a sub-class of `Naml<object>`, all of the methods are available.  However, providing delegate-driven content
+### Using the non-generic Maml class
+The non-generic `Maml` class is used to generate XML documents without template data.  Internally, `Maml` is
+a sub-class of `Maml<object>`, all of the methods are available.  However, providing delegate-driven content
 and attribute functions will always have a `null` passed into them when XML generation is done.
 
-Use `Naml.ToString()` to generate XML content (yes, this one will _not_ throw an exception).
+Use `Maml.ToString()` to generate XML content (yes, this one will _not_ throw an exception).

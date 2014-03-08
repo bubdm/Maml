@@ -7,8 +7,8 @@
     <ProjectGuid>{FA9E0E1F-A942-4335-96CB-3A82F87A025C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Naml.TestConsole</RootNamespace>
-    <AssemblyName>Naml.TestConsole</AssemblyName>
+    <RootNamespace>Maml.TestConsole</RootNamespace>
+    <AssemblyName>Maml.TestConsole</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,9 +48,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Naml\Naml.csproj">
+    <ProjectReference Include="..\Maml\Maml.csproj">
       <Project>{19e7cefd-8f49-4972-b457-702ea7f5167e}</Project>
-      <Name>Naml</Name>
+      <Name>Maml</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

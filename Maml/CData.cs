@@ -1,6 +1,6 @@
-﻿using Naml;
+﻿using Maml;
 
-namespace Naml
+namespace Maml
 {
     /// <summary>
     /// Represents CData in an XML document.  Can be casted explicity to and from a string.

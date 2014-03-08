@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naml", "Naml\Naml.csproj", "{19E7CEFD-8F49-4972-B457-702EA7F5167E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maml", "Maml\Maml.csproj", "{19E7CEFD-8F49-4972-B457-702EA7F5167E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naml.TestConsole", "Naml.TestConsole\Naml.TestConsole.csproj", "{FA9E0E1F-A942-4335-96CB-3A82F87A025C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maml.TestConsole", "Maml.TestConsole\Maml.TestConsole.csproj", "{FA9E0E1F-A942-4335-96CB-3A82F87A025C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Markdown", "Markdown", "{DFF8E0EA-8EA4-4135-AEF3-E31388D3B30E}"
 	ProjectSection(SolutionItems) = preProject

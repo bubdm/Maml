@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Naml")]
+[assembly: AssemblyTitle("Maml")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Life Time Fitness, Inc.")]
-[assembly: AssemblyProduct("Naml")]
+[assembly: AssemblyProduct("Maml")]
 [assembly: AssemblyCopyright("Copyright © Life Time Fitness, Inc. 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

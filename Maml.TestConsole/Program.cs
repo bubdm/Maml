@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Naml;
+using Maml;
 
-namespace Naml.TestConsole
+namespace Maml.TestConsole
 {
     class Program
     {
@@ -14,14 +14,14 @@ namespace Naml.TestConsole
 
         static void Main(string[] args)
         {
-            var xt = new Naml<TemplateData>(t => 
+            var xt = new Maml<TemplateData>(t => 
                 html => html.Set(
                     div => div.Set(
                         new { attribute_name = "value", stuff = "cool", number = 2 },
                         p => p.Set(string.Format("Item 1 = {0}", t.TheString)),
                         p => p.Set(new { data = "some stuff" }, "Item \" 2"),
                         ul => ul.Set(Enumerable.Range(1, t.TheNumber).Select(
-                            i => (Action<Naml<TemplateData>>) 
+                            i => (Action<Maml<TemplateData>>) 
                                 (li => li.Set(string.Format("list item {0}", i))))
                         )
                     ),

@@ -7,8 +7,8 @@
     <ProjectGuid>{19E7CEFD-8F49-4972-B457-702EA7F5167E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Naml</RootNamespace>
-    <AssemblyName>Naml</AssemblyName>
+    <RootNamespace>Maml</RootNamespace>
+    <AssemblyName>Maml</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -42,7 +42,7 @@
     <Compile Include="CData.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="NodeContents.cs" />
-    <Compile Include="Naml.cs" />
+    <Compile Include="Maml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

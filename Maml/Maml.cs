@@ -3,50 +3,50 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace Naml
+namespace Maml
 {   
     /// <summary>
-    /// Naml XML builder class.  Can also produce templated output.
+    /// Maml XML builder class.  Can also produce templated output.
     /// </summary>
-    /// <typeparam name="T">Type of template Naml instance will use for templated output.</typeparam>
-    public class Naml<T>
+    /// <typeparam name="T">Type of template Maml instance will use for templated output.</typeparam>
+    public class Maml<T>
     {
-        private Action<Naml<T>> builder = null;
-        private Func<T, Action<Naml<T>>> builderFunc = null;
+        private Action<Maml<T>> builder = null;
+        private Func<T, Action<Maml<T>>> builderFunc = null;
         private NodeContents<T> contents = new NodeContents<T>();
 
         /// <summary>
-        /// Create instance of Naml{T} with the root node builder.
+        /// Create instance of Maml{T} with the root node builder.
         /// </summary>
-        /// <param name="node">Action{Naml{T}} node builder delegate.  Name of parameter in delegate
+        /// <param name="node">Action{Maml{T}} node builder delegate.  Name of parameter in delegate
         /// determines the name of the node.</param>
-        public Naml(Action<Naml<T>> node)
+        public Maml(Action<Maml<T>> node)
         {
             builder = node;
         }
         /// <summary>
-        /// Create instance of Naml{T} with the root node builder.
+        /// Create instance of Maml{T} with the root node builder.
         /// </summary>
-        /// <param name="node">Func{T, Action{Naml{T}}} delegate for generating a node builder from template 
-        /// data of type T.  The parameter for the Action{Naml{T}} delegate determines the node name
-        public Naml(Func<T, Action<Naml<T>>> node)
+        /// <param name="node">Func{T, Action{Maml{T}}} delegate for generating a node builder from template 
+        /// data of type T.  The parameter for the Action{Maml{T}} delegate determines the node name
+        public Maml(Func<T, Action<Maml<T>>> node)
         {
             builderFunc = node;
         }
 
         /// <summary>
-        /// Create instance of Naml{T} with the root node builder.
+        /// Create instance of Maml{T} with the root node builder.
         /// </summary>
-        /// <param name="node">Action{Naml{T}} function to product content.  Name of function parameters 
+        /// <param name="node">Action{Maml{T}} function to product content.  Name of function parameters 
         /// determines the name of the node.</param>
-        /// <returns>Instance of Naml{T} object representing a root node.</returns>
-        public static Naml<T> Create(Action<Naml<T>> node)
+        /// <returns>Instance of Maml{T} object representing a root node.</returns>
+        public static Maml<T> Create(Action<Maml<T>> node)
         {
-            return new Naml<T>(node);
+            return new Maml<T>(node);
         }
-        public static Naml<T> Create(Func<T, Action<Naml<T>>> node)
+        public static Maml<T> Create(Func<T, Action<Maml<T>>> node)
         {
-            return new Naml<T>(node);
+            return new Maml<T>(node);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Naml
         /// <param name="attributes">Any object where property names and values are used to determine attribute 
         /// names and values</param>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>
-        public void Set(object attributes, params Action<Naml<T>>[] nodes)
+        public void Set(object attributes, params Action<Maml<T>>[] nodes)
         {
             contents.NodeAttributesObject = attributes;
             contents.Children = nodes;
@@ -66,7 +66,7 @@ namespace Naml
         /// <param name="attributes">Any object where property names and values are used to determine attribute 
         /// names and values</param>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>
-        public void Set(object attributes, IEnumerable<Action<Naml<T>>> nodes)
+        public void Set(object attributes, IEnumerable<Action<Maml<T>>> nodes)
         {
             contents.NodeAttributesObject = attributes;
             contents.Children = nodes;
@@ -77,7 +77,7 @@ namespace Naml
         /// names and values</param>
         /// <param name="nodes">A function that takes a parameter of type T and returns an enumeration of
         /// node builder functions representing the child nodes.</param>
-        public void Set(object attributes, Func<T, IEnumerable<Action<Naml<T>>>> nodes)
+        public void Set(object attributes, Func<T, IEnumerable<Action<Maml<T>>>> nodes)
         {
             contents.NodeAttributesObject = attributes;
             contents.ChildrenFunc = nodes;
@@ -88,7 +88,7 @@ namespace Naml
         /// <param name="attributes">A function that takes a parameter of type T and returns any object wherer
         /// the property names and values are used to determine attribute names and values</param>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>
-        public void Set(Func<T, object> attributes, params Action<Naml<T>>[] nodes)
+        public void Set(Func<T, object> attributes, params Action<Maml<T>>[] nodes)
         {
             contents.nodeAttributesObjectFunc = attributes;
             contents.Children = nodes;
@@ -99,7 +99,7 @@ namespace Naml
         /// <param name="attributes">A function that takes a parameter of type T and returns any object wherer
         /// the property names and values are used to determine attribute names and values</param>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>
-        public void Set(Func<T, object> attributes, IEnumerable<Action<Naml<T>>> nodes)
+        public void Set(Func<T, object> attributes, IEnumerable<Action<Maml<T>>> nodes)
         {
             contents.nodeAttributesObjectFunc = attributes;
             contents.Children = nodes;
@@ -111,7 +111,7 @@ namespace Naml
         /// the property names and values are used to determine attribute names and values</param>
         /// <param name="nodes">A function that takes a parameter of type T and returns an enumeration of
         /// node builder functions representing the child nodes.</param>
-        public void Set(Func<T, object> attributes, Func<T, IEnumerable<Action<Naml<T>>>> nodes)
+        public void Set(Func<T, object> attributes, Func<T, IEnumerable<Action<Maml<T>>>> nodes)
         {
             contents.nodeAttributesObjectFunc = attributes;
             contents.ChildrenFunc = nodes;
@@ -122,7 +122,7 @@ namespace Naml
         /// <param name="attributes">A string/string dictionary where keys and values are used to determine 
         /// attribute names and values</param>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>
-        public void Set(IDictionary<string, string> attributes, params Action<Naml<T>>[] nodes)
+        public void Set(IDictionary<string, string> attributes, params Action<Maml<T>>[] nodes)
         {
             contents.NodeAttributes = attributes;
             contents.Children = nodes;
@@ -133,7 +133,7 @@ namespace Naml
         /// <param name="attributes">A string/string dictionary where keys and values are used to determine 
         /// attribute names and values</param>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>
-        public void Set(IDictionary<string, string> attributes, IEnumerable<Action<Naml<T>>> nodes)
+        public void Set(IDictionary<string, string> attributes, IEnumerable<Action<Maml<T>>> nodes)
         {
             contents.NodeAttributes = attributes;
             contents.Children = nodes;
@@ -145,7 +145,7 @@ namespace Naml
         /// attribute names and values</param>
         /// <param name="nodes">A function that takes a parameter of type T and returns an enumeration of
         /// node builder functions representing the child nodes.</param>
-        public void Set(IDictionary<string, string> attributes, Func<T, IEnumerable<Action<Naml<T>>>> nodes)
+        public void Set(IDictionary<string, string> attributes, Func<T, IEnumerable<Action<Maml<T>>>> nodes)
         {
             contents.NodeAttributes = attributes;
             contents.ChildrenFunc = nodes;
@@ -156,7 +156,7 @@ namespace Naml
         /// <param name="attributes">A function that takes a parameter of type T and returns a string/string 
         /// dictionary where keys and values are used to determine attribute names and values</param>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>        
-        public void Set(Func<T, IDictionary<string, string>> attributes, params Action<Naml<T>>[] nodes)
+        public void Set(Func<T, IDictionary<string, string>> attributes, params Action<Maml<T>>[] nodes)
         {
             contents.NodeAttributesFunc = attributes;
             contents.Children = nodes;
@@ -167,7 +167,7 @@ namespace Naml
         /// <param name="attributes">A function that takes a parameter of type T and returns a string/string 
         /// dictionary where keys and values are used to determine attribute names and values</param>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>        
-        public void Set(Func<T, IDictionary<string, string>> attributes, IEnumerable<Action<Naml<T>>> nodes)
+        public void Set(Func<T, IDictionary<string, string>> attributes, IEnumerable<Action<Maml<T>>> nodes)
         {
             contents.NodeAttributesFunc = attributes;
             contents.Children = nodes;
@@ -179,7 +179,7 @@ namespace Naml
         /// dictionary where keys and values are used to determine attribute names and values</param>
         /// <param name="nodes">A function that takes a parameter of type T and returns an enumeration of
         /// node builder functions representing the child nodes.</param>      
-        public void Set(Func<T, IDictionary<string, string>> attributes, Func<T, IEnumerable<Action<Naml<T>>>> nodes)
+        public void Set(Func<T, IDictionary<string, string>> attributes, Func<T, IEnumerable<Action<Maml<T>>>> nodes)
         {
             contents.NodeAttributesFunc = attributes;
             contents.ChildrenFunc = nodes;
@@ -188,7 +188,7 @@ namespace Naml
         /// Set child nodes of current node with no attributes.
         /// </summary>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>        
-        public void Set(params Action<Naml<T>>[] nodes)
+        public void Set(params Action<Maml<T>>[] nodes)
         {
             contents.NodeAttributesObject = null;
             contents.Children = nodes;
@@ -196,7 +196,7 @@ namespace Naml
         /// Set child nodes of current node with no attributes.
         /// </summary>
         /// <param name="nodes">One of more node builder functions representing the child nodes.</param>        
-        public void Set(IEnumerable<Action<Naml<T>>> nodes)
+        public void Set(IEnumerable<Action<Maml<T>>> nodes)
         {
             contents.NodeAttributesObject = null;
             contents.Children = nodes;
@@ -206,7 +206,7 @@ namespace Naml
         /// </summary>
         /// <param name="nodes">A function that takes a parameter of type T and returns an enumeration of
         /// node builder functions representing the child nodes.</param>              
-        public void Set(Func<T, IEnumerable<Action<Naml<T>>>> nodes)
+        public void Set(Func<T, IEnumerable<Action<Maml<T>>>> nodes)
         {
             contents.NodeAttributesObject = null;
             contents.ChildrenFunc = nodes;
@@ -487,7 +487,7 @@ namespace Naml
 
         protected void RenderNode(StringBuilder sb, T obj)
         {
-            Action<Naml<T>> actualBuilder = builder ?? builderFunc(obj);
+            Action<Maml<T>> actualBuilder = builder ?? builderFunc(obj);
             string nodeName = actualBuilder.Method.GetParameters()[0].Name;
             actualBuilder(this);
 
@@ -519,14 +519,14 @@ namespace Naml
                 {
                     foreach (var expr in children)
                     {
-                        Naml<T>.Create(expr).RenderNode(sb, obj);
+                        Maml<T>.Create(expr).RenderNode(sb, obj);
                     }
                 }
                 sb.AppendFormat("</{0}>", XmlConvert.EncodeName(nodeName));
             }
         }
         /// <summary>
-        /// Returns a string that represents the current object.  In Naml{T}, this will ALWAYS throw a
+        /// Returns a string that represents the current object.  In Maml{T}, this will ALWAYS throw a
         /// InvalidOperationException.  You must use ToString(T source) to generate XML strings with 
         /// instances of this object.
         /// </summary>
@@ -536,7 +536,7 @@ namespace Naml
             throw new InvalidOperationException("Must use ToString(source)");
         }
         /// <summary>
-        /// Render Naml template to an XML string using a provided template data object of type T.
+        /// Render Maml template to an XML string using a provided template data object of type T.
         /// </summary>
         /// <param name="source">Instance of object of type T to drive function-based attributes,
         /// Text, CDATA and child nodes.</param>
@@ -550,35 +550,35 @@ namespace Naml
     }
 
     /// <summary>
-    /// Non-generic version of a Naml template, design for non-function-based XML generation.
+    /// Non-generic version of a Maml template, design for non-function-based XML generation.
     /// </summary>
     /// <remarks>
-    /// This basically is a sub-class of Naml{object}.  All of the function-based Set and Self methods
+    /// This basically is a sub-class of Maml{object}.  All of the function-based Set and Self methods
     /// are avaiable, but will always contain a null object when those functions are run.
     /// </remarks>
-    public class Naml : Naml<object>
+    public class Maml : Maml<object>
     {
         /// <summary>
-        /// Create instance of Naml with the root node builder.
+        /// Create instance of Maml with the root node builder.
         /// </summary>
-        /// <param name="node">Action{Naml} node builder delegate.  Name of parameter in delegate
+        /// <param name="node">Action{Maml} node builder delegate.  Name of parameter in delegate
         /// determines the name of the node.</param>
-        public Naml(Action<Naml> node) : base((Action<Naml<object>>) node)
+        public Maml(Action<Maml> node) : base((Action<Maml<object>>) node)
         {
         }
 
         /// <summary>
-        /// Create a non-generic instance of Naml.
+        /// Create a non-generic instance of Maml.
         /// </summary>
-        /// <param name="node">Action{Naml} function to product content.  Name of function parameters 
+        /// <param name="node">Action{Maml} function to product content.  Name of function parameters 
         /// determines the name of the node.</param>
-        /// <returns>Instance of Naml object representing a root node.</returns>
-        public static Naml Create(Action<Naml> node)
+        /// <returns>Instance of Maml object representing a root node.</returns>
+        public static Maml Create(Action<Maml> node)
         {
-            return new Naml(node);
+            return new Maml(node);
         }
         /// <summary>
-        /// Render Naml template to an XML string.
+        /// Render Maml template to an XML string.
         /// </summary>
         /// <remarks>
         /// No template data object is required, the template data object provided to all function-driven attribute,

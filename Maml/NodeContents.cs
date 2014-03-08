@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using XB = Naml;
+using XB = Maml;
 
-namespace Naml
+namespace Maml
 {
     internal enum NodeType
     {
@@ -26,10 +26,10 @@ namespace Naml
         public NodeType NodeType { get; private set; }
         private string nodeText = null;
         private CData nodeCdata = null;
-        private IEnumerable<Action<Naml<T>>> children;
+        private IEnumerable<Action<Maml<T>>> children;
         private Func<T, string> nodeTextFunc = null;
         private Func<T, CData> nodeCdataFunc = null;
-        private Func<T, IEnumerable<Action<Naml<T>>>> childrenFunc;
+        private Func<T, IEnumerable<Action<Maml<T>>>> childrenFunc;
         private bool selfClose = false;
 
         public AttributesType AttributesType { get; private set; }
@@ -74,7 +74,7 @@ namespace Naml
                 nodeAttributesObjectFunc = value;
             }
         }
-        public IEnumerable<Action<Naml<T>>> Children
+        public IEnumerable<Action<Maml<T>>> Children
         {
             get { return children; }
             set
@@ -84,7 +84,7 @@ namespace Naml
                 SelfClose = false;
             }
         }
-        public Func<T, IEnumerable<Action<Naml<T>>>> ChildrenFunc
+        public Func<T, IEnumerable<Action<Maml<T>>>> ChildrenFunc
         {
             get { return childrenFunc; }
             set
@@ -179,7 +179,7 @@ namespace Naml
                     return null;
             }
         }
-        public IEnumerable<Action<Naml<T>>> GetChildren(T obj)
+        public IEnumerable<Action<Maml<T>>> GetChildren(T obj)
         {
             switch (NodeType)
             {
