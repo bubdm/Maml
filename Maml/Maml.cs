@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using System.Linq;
 
 namespace Maml
 {   
@@ -488,16 +489,16 @@ namespace Maml
         protected void RenderNode(StringBuilder sb, T obj)
         {
             Action<Maml<T>> actualBuilder = builder ?? builderFunc(obj);
-            string nodeName = actualBuilder.Method.GetParameters()[0].Name;
+            string nodeName = XmlConvert.EncodeName(actualBuilder.Method.GetParameters()[0].Name);
             actualBuilder(this);
 
-            sb.AppendFormat("<{0}", XmlConvert.EncodeName(nodeName));
+            sb.AppendFormat("<{0}", nodeName);
             var atts = contents.GetAttributes(obj);
             if (atts != null)
             {
                 foreach (var att in atts)
                 {
-                    sb.AppendFormat(" {0}=\"{1}\"",
+                    sb.AppendFormat(@" {0}=""{1}""",
                         XmlConvert.EncodeName(att.Key.Replace('_', '-')), 
                         System.Security.SecurityElement.Escape(att.Value));
                 }
@@ -510,19 +511,19 @@ namespace Maml
             {
                 sb.Append(">");
                 var text = contents.GetStringValue(obj);
-                var children = contents.GetChildren(obj);
                 if (text != null)
                 {
                     sb.Append(text);
                 }
                 else
                 {
+                    var children = contents.GetChildren(obj);
                     foreach (var expr in children)
                     {
                         Maml<T>.Create(expr).RenderNode(sb, obj);
                     }
                 }
-                sb.AppendFormat("</{0}>", XmlConvert.EncodeName(nodeName));
+                sb.AppendFormat("</{0}>", nodeName);
             }
         }
         /// <summary>
