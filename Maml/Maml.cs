@@ -486,12 +486,17 @@ namespace Maml
             contents.SelfClose = true;
         }
 
-        protected void RenderNode(StringBuilder sb, T obj)
+        protected void RenderNode(StringBuilder sb, T obj, int indent = -1)
         {
             Action<Maml<T>> actualBuilder = builder ?? builderFunc(obj);
             string nodeName = XmlConvert.EncodeName(actualBuilder.Method.GetParameters()[0].Name);
             actualBuilder(this);
 
+            if (indent > 0)
+            {
+                sb.AppendLine();
+                sb.Append(new string('\t', indent));
+            }
             sb.AppendFormat("<{0}", nodeName);
             var atts = contents.GetAttributes(obj);
             if (atts != null)
@@ -518,9 +523,17 @@ namespace Maml
                 else
                 {
                     var children = contents.GetChildren(obj);
-                    foreach (var expr in children)
+                    if (children != null && children.Any())
                     {
-                        Maml<T>.Create(expr).RenderNode(sb, obj);
+                        foreach (var expr in children)
+                        {
+                            Maml<T>.Create(expr).RenderNode(sb, obj, indent >= 0 ? indent + 1 : -1);
+                        }
+                        if (indent >= 0)
+                        {
+                            sb.AppendLine();
+                            sb.Append(new string('\t', indent));
+                        }
                     }
                 }
                 sb.AppendFormat("</{0}>", nodeName);
@@ -542,10 +555,10 @@ namespace Maml
         /// <param name="source">Instance of object of type T to drive function-based attributes,
         /// Text, CDATA and child nodes.</param>
         /// <returns>XML string</returns>
-        public string ToString(T source)
+        public string ToString(T source, bool indent = false)
         {
             StringBuilder xml = new StringBuilder();
-            RenderNode(xml, source);
+            RenderNode(xml, source, indent ? 0 : -1);
             return xml.ToString();
         }
     }
@@ -589,6 +602,10 @@ namespace Maml
         public override string ToString()
         {
             return base.ToString(null);
+        }
+        public string ToString(bool indent)
+        {
+            return base.ToString(null, indent);
         }
     }
 }

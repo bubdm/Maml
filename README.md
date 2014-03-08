@@ -60,9 +60,23 @@ namespace Maml.TestConsole
 
 Produces this output:
 ```
-<html><div attribute-name="value" stuff="cool" number="2"><p>Item 1 = Hello</p><p data="some stuff">Item &quot; 2</p><ul><li>list item 1</li><li>list item 2</li><li>list item 3</li><li>list item 4</li><li>list item 5</li></ul></div><div><![CDATA[this is some cdata]]></div><script src="http://www.something.com/test.js"type="text/javascript"></script></html>
+<html>
+        <div attribute-name="value" stuff="cool" number="2">
+                <p>Item 1 = Hello</p>
+                <p data="some stuff">Item &quot; 2</p>
+                <ul>
+                        <li>list item 1</li>
+                        <li>list item 2</li>
+                        <li>list item 3</li>
+                        <li>list item 4</li>
+                        <li>list item 5</li>
+                </ul>
+        </div>
+        <div><![CDATA[this is some cdata]]></div>
+        <script src="http://www.test.com/test.js" type="text/javascript"></script>
+</html>
 
-<html><div attribute-name="value" stuff="cool" number="2"><p>Item 1 = BLAH BLAH</p><p data="some stuff">Item &quot; 2</p><ul><li>list item 1</li><li>list item 2</li></ul></div><div><![CDATA[this is some cdata]]></div><script src="http://www.something.com/test.js" type="text/javascript"></script></html>
+<html><div attribute-name="value" stuff="cool" number="2"><p>Item 1 = BLAH BLAH</p><p data="some stuff">Item &quot; 2</p><ul><li>list item 1</li><li>list item 2</li></ul></div><div><![CDATA[this is some cdata]]></div><script src="http://www.test.com/test.js" type="text/javascript"></script></html>
 ```
 
 ## How it works
@@ -114,8 +128,9 @@ to how `Set()` accepts attributes.
 cases :)]
 
 ### Generating XML document string
-Use the `ToString(T source)` method to generate an XML string.  Provide an instance of type `T` as the argument
-to drive delegate-driven content and attribute generation.
+Use the `ToString(T source, bool indent = false)` method to generate an XML string.  Provide an instance of type `T` as the argument
+to drive delegate-driven content and attribute generation.  The `indent` argument determines if indentation and line break are added
+(defaults to no indenting).  Indentation always uses tabs for indentions.
 
 [*NOTE*: `Maml<T>.ToString()` will throw a NotImplementedException.  You _must_ provide a template data object
 parameter.]
@@ -125,4 +140,4 @@ The non-generic `Maml` class is used to generate XML documents without template 
 a sub-class of `Maml<object>`, all of the methods are available.  However, providing delegate-driven content
 and attribute functions will always have a `null` passed into them when XML generation is done.
 
-Use `Maml.ToString()` to generate XML content (yes, this one will _not_ throw an exception).
+Use `Maml.ToString()` and `Maml.ToString(bool indent)` to generate XML content (yes, this one will _not_ throw an exception).

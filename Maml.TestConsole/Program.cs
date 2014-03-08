@@ -28,14 +28,14 @@ namespace Maml.TestConsole
                     div => div.Set((CData)"this is some cdata"),
                     script => script.Set(new 
                     { 
-                        src = "http://www.something.com/test.js", type = "text/javascript" 
+                        src = "http://www.test.com/test.js", type = "text/javascript" 
                     })
                 )
             );
 
             Console.WriteLine(
                 xt.ToString(
-                    new TemplateData { TheNumber = 5, TheString = "Hello" }
+                    new TemplateData { TheNumber = 5, TheString = "Hello" }, true
                 )
             );
             Console.WriteLine();
