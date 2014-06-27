@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Maml")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Life Time Fitness, Inc.")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Maml")]
-[assembly: AssemblyCopyright("Copyright © Life Time Fitness, Inc. 2014")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
